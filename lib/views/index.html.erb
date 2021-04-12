@@ -6,10 +6,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Boardimo</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-  <link rel="stylesheet" href="tailwind.min.css" />
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" type="text/css" href="css/tailwind.min.css" />
+  <link rel="stylesheet" type="text/css" href="css/style.css" />
 </head>
 <body>
+
+<!--
+    <div class="houses" style="display: flex; flex-wrap: wrap;justify-content: center">
+    <% houses.each do |house| %>
+        <div class="house" style="border: 2px solid black;width: 20%">
+            <p>Lien : <%= house.data["link"] %></p>  
+            <p>Nom : <%= house.data["name"] %></p>            
+            <p>Ville : <%= house.data["city"] %></p>
+            <p>Surface : <%= house.data["surface"] %></p>
+            <p>Année : <%= house.data["year"] %></p>
+            <p>Energetique : <%= house.data["energetics"] %></p>
+            <p>Prix : <%= house.data["price"] %></p>
+            <p>Honoraires : <%= house.data["price"] %></p>
+        </div>
+    <% end %>
+    </div>
+ -->
 
   <header>
     <img src="images/boardimo/logo2.png" alt="logo boardimo">
@@ -23,10 +40,9 @@
     </div>
   </section>
 
-
   <section id="results" class="flex shadow-2xl">
     <div class="flex-none w-48 relative">
-      <img src="./images/boardimo/house.png" alt="" class="absolute inset-0 w-full h-full object-cover" />
+      <img src="images/boardimo/house.png" alt="" class="absolute inset-0 w-full h-full object-cover" />
     </div>
     <form class="flex-auto p-6">
       <div class="flex flex-wrap">

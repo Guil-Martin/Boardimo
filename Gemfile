@@ -17,5 +17,16 @@ gem "rufo"
 gem "nokogiri"
 gem "open-uri"
 
+# Ruby web server
+# gem uninstall eventmachine
+# gem install eventmachine --platform ruby
+gem "thin"
+# Generic interface of different Ruby template engines
+gem "tilt"
+# Ruby template engine
+gem "erb"
+# Generic interface of ruby web servers
+gem "rack"
+
 # DB
 gem "sqlite3"

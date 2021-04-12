@@ -16,6 +16,11 @@ class House
         db.execute("SELECT * FROM House").map {|row| self.new(row)}
     end
 
+    def self.all_to_h
+        # Needs to go through a serializer to format the data
+        db.execute("SELECT * FROM House")
+    end
+
     def self.add_houses(data)
         db.execute(
             "INSERT OR IGNORE INTO House VALUES(:link,:name,:description,:city,:surface,:price,:energetics,:year,:fee)",
