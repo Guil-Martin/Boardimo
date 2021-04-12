@@ -45,29 +45,33 @@ class HouseSanitizer
     end
 
     def clean_city
-        @data[:city] = @data[:city].tr(" ", "").scan(/\D+/).first
+        @data[:city] = @data[:city].scan(/vannes|Vannes|séné|Séné|questembert|Questembert|auray|Auray/).first.capitalize
+        # @data[:city] = @data[:city].delete("^(vannes|Vannes|séné|Séné|questembert|Questembert|auray|Auray')").capitalize
+        
     end
 
     def clean_surface
-        @data[:surface] = @data[:surface].tr(" ", "").scan(/\d+|\D+/).first.to_i
+        @data[:surface] = @data[:surface].delete("^0-9").to_i
     end
 
     def clean_price
-        @data[:price] = @data[:price].tr(" ", "").scan(/\d+|\D+/).first.to_i
+        @data[:price] = @data[:price].delete("^0-9").to_i
     end
 
     def clean_energetics
-        if ["A", "B", "C", "D", "E", "F", "G"].include? @data[:energetics]
-            @data[:energetics] = House::ENERGETICS[@data[:energetics]]
-        end
+        @data[:energetics] = House::ENERGETICS[@data[:energetics].scan(/[A-G]/).first]
     end
 
     def clean_year
-        @data[:year] = @data[:year].tr(" ", "").scan(/\d+|\D+/).first.to_i
+        @data[:year] = @data[:year].delete("^0-9").to_i
     end
 
     def clean_fee
-        @data[:fee]
+        if @data[:fee].include?("ne") && @data[:fee].include?("pas")
+            @data[:fee] = 0
+        else
+            @data[:fee] = 1
+        end
     end
 
     # Eventual errors checks
