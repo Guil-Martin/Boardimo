@@ -51,11 +51,13 @@ class HouseSanitizer
     end
 
     def clean_surface
-        @data[:surface] = @data[:surface].delete("^0-9").to_i
+        @data[:surface].slice!("m2") if @data[:surface].include?("m2")
+        @data[:surface] = @data[:surface].delete("^0-9").to_i    
     end
 
     def clean_price
-        @data[:price] = @data[:price].delete("^0-9").to_i
+        @data[:price] = @data[:price].delete("^0-9")
+        # @data[:price].tr(" ", "").split(/(?=[a-z])/).first.to_i
     end
 
     def clean_energetics

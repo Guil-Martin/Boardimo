@@ -20,6 +20,8 @@ class Router
             controller.index
         when "/api_index"
             controller.api_index
+        when "/api_scan"            
+            controller.api_scan(params["link"])
         else
             controller.not_found
         end

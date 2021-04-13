@@ -23,6 +23,7 @@ house_links.each do |link|
     noko = Nokogiri::HTML(house_single)
     
     link = "#{cities[:vannes]}/#{link}"
+    img = "#{cities[:vannes]}#{noko.css("#singleArticleImage > img")[0].attr("src")[1..-1]}"  
     name = noko.css("#titleSingleArticle h2").children.text
     description = noko.css("#articleContent").children.text
     city = noko.css(".location").children.text
@@ -34,8 +35,9 @@ house_links.each do |link|
     
     data =
         HouseSanitizer.new(
-            name: name,
             link: link,
+            img: img,
+            name: name,
             description: description,
             city: city,
             surface: surface,
@@ -60,11 +62,10 @@ house_links.each do |link|
     house_single = URI.open("#{cities[:auray]}/pages/#{link}")
     noko = Nokogiri::HTML(house_single)
     
-    link = "#{cities[:auray]}/#{link}"
+    link = "#{cities[:auray]}/pages/#{link}"
+    img = "#{cities[:auray]}#{noko.css("#secion-ad > img")[0].attr("src")[2..-1]}"
     name = noko.css("h1").children.text
-
     stats = noko.css("#single-ad-description > div > p")
-
     surface = stats[0].text
     city = stats[1].text
     price = stats[2].text
@@ -77,8 +78,9 @@ house_links.each do |link|
     
     data =
         HouseSanitizer.new(
-            name: name,
             link: link,
+            img: img,
+            name: name,
             description: description,
             city: city,
             surface: surface,
@@ -104,6 +106,7 @@ house_links.each do |link|
     noko = Nokogiri::HTML(house_single)
     
     link = "#{cities[:questembert]}/#{link}"
+    img = "#{cities[:questembert]}/#{noko.css(".houseImg > img")[0].attr("src")}"
     name = noko.css(".title").children.text
     description = noko.css(".houseDescription").children.text
     city = noko.css(".city").children.text
@@ -117,8 +120,9 @@ house_links.each do |link|
     
     data =
         HouseSanitizer.new(
-            name: name,
             link: link,
+            img: img,
+            name: name,
             description: description,
             city: city,
             surface: surface,
