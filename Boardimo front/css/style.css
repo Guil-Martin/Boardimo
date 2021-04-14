@@ -97,25 +97,37 @@ span.price {
 }
 
 .bg-a {
-  background-color: #09db09;
+  color: #7c9600;
+  background-color: #eef5bf;
+  border-color: #d3de8b;
+  /*background-color: #09db09;*/
 }
 .bg-b {
   background-color: #82c506;
 }
 .bg-c {
-  background-color: #fffb00;
+  color: #9e9b00;
+  background-color: #ebf8a1;
+  border-color: rgb(233, 212, 151);
+  /*background-color: #fffb00;*/
 }
 .bg-d {
   background-color: #ffae00;
 }
 .bg-e {
-  background-color: #ff7300;
+  color: #856404;
+  background-color: #fff3cd;
+  border-color: #ffeeba;
+  /*background-color: #ff7300;*/
 }
 .bg-f {
   background-color: #ff5100;
 }
 .bg-g {
-  background-color: #ff0000;
+  color: #721c24;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+  /*background-color: #ff0000;*/
 }
 
 .alert-info {

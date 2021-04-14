@@ -69,11 +69,17 @@ class House
         data[0]["avg"].to_i
     end
 
-    def self.get_average_energetics
-        data = db.execute("SELECT AVG(energetics) avg FROM House")
+    def self.get_average_energetics_city(city_name)
+        data = db.execute(" SELECT AVG(energetics) avg FROM City
+                            JOIN House ON House.CityName = '#{city_name}'")
         data[0]["avg"].to_i
     end
 
+    def self.get_renovation_cost_house(link)
+
+        
+
+    end
 
     # V Percent comparing methods V
     # Return more than 100 if worse or less than 100 if better, excess being the percent 
@@ -92,23 +98,39 @@ class House
             city_name = data[0]["cityName"]
         end
         price_square_meter_city = get_price_square_meter_city(city_name)
-        price_square_meter * 100 / price_square_meter_city 
+        price_square_meter * 100 / price_square_meter_city
     end
 
     def self.compare_year(link)
         year = 0
+        city_name = ""
         if link.is_a?(House)
             year = link.data["year"]
         else
-            data = db.execute("SELECT year FROM House WHERE link LIKE '%#{link}' LIMIT 1")
+            data = db.execute("SELECT year, cityName FROM House WHERE link LIKE '%#{link}' LIMIT 1")
             year = data[0]["year"]
         end
-        year_city = get_average_year
+        year_city = get_average_year_city(city_name)
         year * 100 / year_city
     end
 
+    def self.compare_energetics(link)
+        energetics = 0
+        city_name = ""
+        if link.is_a?(House)
+            energetics = link.data["energetics"]
+            city_name = link.data["cityName"]
+        else
+            data = db.execute("SELECT energetics, cityName FROM House WHERE link LIKE '%#{link}' LIMIT 1")
+            energetics = data[0]["energetics"]
+            city_name = data[0]["cityName"]
+        end
+        energetics_city = get_average_energetics_city(city_name)
+        energetics * 100 / energetics_city
+    end
+
     attr_reader :data
-    def initialize(data)        
+    def initialize(data)
         @data = data
     end
 end

@@ -4,7 +4,7 @@ class HouseSanitizer
     end
 
     def to_h
-
+        
         clean_data
         @data
 
@@ -13,7 +13,7 @@ class HouseSanitizer
         #     @data
         # rescue => _
         #     {}
-        # end        
+        # end
     end
 
     private
@@ -47,12 +47,11 @@ class HouseSanitizer
     def clean_city
         @data[:city] = @data[:city].scan(/vannes|Vannes|séné|Séné|questembert|Questembert|auray|Auray/).first.capitalize
         # @data[:city] = @data[:city].delete("^(vannes|Vannes|séné|Séné|questembert|Questembert|auray|Auray')").capitalize
-        
     end
 
     def clean_surface
         @data[:surface].slice!("m2") if @data[:surface].include?("m2")
-        @data[:surface] = @data[:surface].delete("^0-9").to_i    
+        @data[:surface] = @data[:surface].delete("^0-9").to_i
     end
 
     def clean_price

@@ -38,38 +38,39 @@ class Controller
             price_sqm = House::get_price_square_meter_house(@house)
             price_sqm_city = House::get_price_square_meter_city(@house.data["cityName"])
             price_sqm_compare = House::compare_price_square_meter(@house)
-            year_average = House::get_average_year
+            year_average = House::get_average_year_city(@house.data["cityName"])
             year_compare = House::compare_year(@house)
+            energetics_average = House::get_average_energetics_city(@house.data["cityName"])
+            energetics_compare = House::compare_energetics(@house)
+            # renovation_cost = House::get_renovation_cost_House(@house)
+            # p @house.data
 
             stats = {
                 "price_sqm" => price_sqm,
                 "price_sqm_city" => price_sqm_city,
                 "price_sqm_compare" => price_sqm_compare,
                 "year_average" => year_average,
-                "year_compare" => year_compare
-            }            
+                "year_compare" => year_compare,
+                "energetics_average" => energetics_average,
+                "energetics_compare" => energetics_compare
+            }
 
             ## Convert prices, add m² to surface
-            # house_data = 
-            # HouseSerializer.new(
-            #     house: @house.data,
-            # ).to_h
+            house_data = HouseSerializer.new(house: @house.data).to_h
+
+            p house_data
+            # binding.pry
 
             ## Convert price_sqm_compare, year_compare to percent
             ## add year_better, price_sqm_better booleans to the stats hash
             ## depending on more than 100 or less than 100
-            # stats_data =
-            # StatsSerializer.new(
-            #     price_sqm_city: price_sqm_city,
-            #     price_sqm_compare: price_sqm_compare,
-            #     year_compare: year_compare,
-            # )
+            stats_data = StatsSerializer.new(stats: stats).to_h
 
             links = House::get_links
 
             # binding.pry
 
-            render_json({house: @house.data, stats: stats})
+            render_json({house: house_data, stats: stats_data})
         else
             # House not found
         end
@@ -83,6 +84,14 @@ class Controller
 
     def not_found
         render({}, 404)
+    end
+
+    def req_options
+        [
+            200, 
+            {"Content-Type" => "application/json"}, 
+            [{}]
+        ]
     end
 
     private

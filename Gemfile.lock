@@ -21,6 +21,8 @@ GEM
       method_source (~> 1.0)
     racc (1.5.2)
     rack (2.2.3)
+    rack-cors (1.1.1)
+      rack (>= 2.0.0)
     rspec (3.10.0)
       rspec-core (~> 3.10.0)
       rspec-expectations (~> 3.10.0)
@@ -55,6 +57,7 @@ DEPENDENCIES
   open-uri
   pry
   rack
+  rack-cors
   rspec
   rufo
   sqlite3

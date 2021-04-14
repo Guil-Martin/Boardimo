@@ -2,14 +2,14 @@
 var scanInput = document.getElementById("scanInput");
 var btnScan = document.getElementById("scan");
 var result = document.getElementById("results")
+var analyse = document.getElementById("analyse")
 btnScan.addEventListener("click", function(e) {
 
     fetch('http://localhost:7373/api_scan', {
         method: 'POST',
-        // mode: 'no-cors',
         headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json',
+            'Content-Type': 'plain/text;charset=UTF-8',
         },
         body: JSON.stringify({link: scanInput.value}),
     })
@@ -41,10 +41,54 @@ btnScan.addEventListener("click", function(e) {
                     <div class="bottom-divide">
                         Prix par m² <span class="price">${data["stats"]["price_sqm"]}</span>
                     </div>
-
                 </div>
             </form>
             `;
+
+
+            // Price comparison //
+            let priceSqmPercent = data["stats"]["price_sqm_compare"];
+            let priceBG = price_bg(priceSqmPercent);
+            priceGood = priceSqmPercent > 100;
+            priceSqmPercent = percent(priceSqmPercent);
+            ////
+
+            // Year comparison //
+            let year_compare = data["stats"]["price_sqm_compare"];
+            ////
+
+            // Energetics //
+            let energetics = data["house"]["energetics"];
+            let energeticsBG = energetics_BG(energetics);
+            let energeticsCompare = data["stats"]["energetics_compare"];
+            ////
+
+            analyse.innerHTML = `
+            <h2>Analyse du bien</h2>
+            <div class="alert ${priceBG} " role="alert">
+                <h4 class="alert-heading">Prix du bien</h4>
+                <p>À ${data["house"]["cityName"]}, le prix moyen d'une maison au m² est de <b>${data["stats"]["price_sqm_city"]}</b> soit ${priceSqmPercent}% ${priceGood ? "inférieur" : "supérieur"}  au prix de ce bien.</p>
+            </div>
+            <div class="alert alert-info" role="alert">
+                <h4 class="alert-heading">Année de construction</h4>
+                <p>Cette maison <b>est plus récente que 73%</b> des maisons en vente actuellement et a en moyenne <b>8 ans de moins que la concurrence</b></p>
+                <hr>
+                <p class="mb-0">Suite à un achat de ce type, un acquereur dépensera en moyenne <b>39 600€ de rénovations en tout genre</b> soit <b>17 325€ de moins</b> que la moyenne pour cette surface</p>
+            </div>
+            <div class="alert ${energeticsBG}" role="alert">
+                <h4 class="alert-heading">Classe énergie</h4>
+                <p>Cette maison a une <b>classe énergétique ${energetics}</b> ce qui est moins bien que 51% des maisons en vente actuellement</b></p>
+                <hr>
+                <p class="mb-0">Le surcoût énergétique par m2 est estimé à 30.4€</b> 
+                </p>
+            </div>
+            <div class="alert alert-danger" role="alert">
+                <h4 class="alert-heading">Estimation</h4>
+                <p>En prenant en compte l'année de construction, la localisation et le prix au m2 nous pensons que cette maison est surévaluée.</p>
+                <hr>
+                <p class="mb-0">Afin de correspondre au prix du marché nous évaluons que le prix de ce bien devrait se situer entre <b>552k€</b> et <b>675k€</b></p>
+            </div>
+            `
 
         // update content
     })
@@ -58,10 +102,14 @@ var linksEnable = document.getElementById("linksEnable");
 var linksContainer = document.getElementsByClassName("links")[0]; 
 linksEnable.addEventListener("click", function(e) {
 
-    console.log(e.currentTarget);
     e.currentTarget.disabled = true;
 
-    fetch('http://localhost:7373/api_links')
+    fetch('http://localhost:7373/api_links', {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'plain/text;charset=UTF-8',
+        }
+    })    
     .then(response => response.json())
     .then(data => {
 
@@ -90,3 +138,21 @@ linksEnable.addEventListener("click", function(e) {
     });
 
 });
+
+function price_bg(percent) {
+    if ((percent / 100) < 0.75) { return "bg-a"; } 
+    else if ((percent / 100) < 1.25) { return "bg-c"; } 
+    else if ((percent / 100) < 1.5) {return "bg-e"; } 
+    else { return "bg-g"; }
+}
+
+function energetics_BG(energetics) {
+    if (energetics == "A" || energetics == "B") { return "bg-a" }
+    else if (energetics == "C" || energetics == "D") { return "bg-c"; }
+    else if (energetics == "E") { return "bg-e"; }
+    else { return "bg-g" }    
+}
+
+function percent(percent) {
+    return percent > 100 ? percent - 100 : -(percent -100);
+}

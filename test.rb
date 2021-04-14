@@ -59,4 +59,10 @@ p "compare_year by link - #{compare_year}"
 
 p House::get_links
 
+num = 73
+
+p num.to_s.length
+
+p num.to_s.gsub(/\d(?=(...)+$)/, '\0 ')
+
 # binding.pry

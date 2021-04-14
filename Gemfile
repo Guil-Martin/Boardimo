@@ -27,6 +27,7 @@ gem "tilt"
 gem "erb"
 # Generic interface of ruby web servers
 gem "rack"
+gem "rack-cors"
 
 # DB
 gem "sqlite3"
