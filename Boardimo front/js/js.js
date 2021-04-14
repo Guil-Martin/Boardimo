@@ -49,35 +49,40 @@ btnScan.addEventListener("click", function(e) {
             // Price comparison //
             let priceSqmPercent = data["stats"]["price_sqm_compare"];
             let priceBG = price_bg(priceSqmPercent);
-            priceGood = priceSqmPercent > 100;
+            let priceGood = priceSqmPercent > 100;
             priceSqmPercent = percent(priceSqmPercent);
             ////
 
             // Year comparison //
-            let year_compare = data["stats"]["price_sqm_compare"];
+            let year_compare = data["stats"]["year_compare"];
+            let yearDiff = data["house"]["year"] - data["stats"]["year_average"]
+            let yearBG = year_bg(data["stats"]["renovation_cost"]["oldness"]);
+            let renov = data["stats"]["renovation_cost"]["renov"]
+            let avg_less = data["stats"]["renovation_cost"]["avg_less"]      
             ////
 
             // Energetics //
             let energetics = data["house"]["energetics"];
             let energeticsBG = energetics_BG(energetics);
-            let energeticsCompare = data["stats"]["energetics_compare"];
+            let energeticsCompare = percent(data["stats"]["energetics_compare"]);
+            let energeticsExtraCost = energetics_extra_cost(energetics);            
             ////
-
+            
             analyse.innerHTML = `
             <h2>Analyse du bien</h2>
             <div class="alert ${priceBG} " role="alert">
                 <h4 class="alert-heading">Prix du bien</h4>
                 <p>À ${data["house"]["cityName"]}, le prix moyen d'une maison au m² est de <b>${data["stats"]["price_sqm_city"]}</b> soit ${priceSqmPercent}% ${priceGood ? "inférieur" : "supérieur"}  au prix de ce bien.</p>
             </div>
-            <div class="alert alert-info" role="alert">
+            <div class="alert ${yearBG}" role="alert">
                 <h4 class="alert-heading">Année de construction</h4>
-                <p>Cette maison <b>est plus récente que 73%</b> des maisons en vente actuellement et a en moyenne <b>8 ans de moins que la concurrence</b></p>
+                <p>Cette maison <b>est plus récente que ${year_compare}%</b> des maisons en vente actuellement et a en moyenne <b>${yearDiff > 0 ? yearDiff + " ans de moins que la concurrence" : -yearDiff + " ans de plus que la concurrence"} </b></p>
                 <hr>
-                <p class="mb-0">Suite à un achat de ce type, un acquereur dépensera en moyenne <b>39 600€ de rénovations en tout genre</b> soit <b>17 325€ de moins</b> que la moyenne pour cette surface</p>
+                <p class="mb-0">Suite à un achat de ce type, un acquereur dépensera en moyenne <b>${renov} de rénovations en tout genre</b> soit <b>${avg_less < 0 ? -avg_less + " de plus" : avg_less + " de moins"}</b> que la moyenne pour cette surface</p>
             </div>
             <div class="alert ${energeticsBG}" role="alert">
                 <h4 class="alert-heading">Classe énergie</h4>
-                <p>Cette maison a une <b>classe énergétique ${energetics}</b> ce qui est moins bien que 51% des maisons en vente actuellement</b></p>
+                <p>Cette maison a une <b>classe énergétique ${energetics}</b> ce qui est moins bien que ${energeticsCompare}% des maisons en vente actuellement</b></p>
                 <hr>
                 <p class="mb-0">Le surcoût énergétique par m2 est estimé à 30.4€</b> 
                 </p>
@@ -146,11 +151,30 @@ function price_bg(percent) {
     else { return "bg-g"; }
 }
 
+function year_bg(oldness) {
+    if (oldness < 10) { return "bg-a"; } 
+    else if (oldness >= 10 && oldness < 20) { return "bg-c"; } 
+    else if (oldness >= 20 && oldness < 40) {return "bg-e"; } 
+    else { return "bg-g"; }
+}
+
 function energetics_BG(energetics) {
     if (energetics == "A" || energetics == "B") { return "bg-a" }
     else if (energetics == "C" || energetics == "D") { return "bg-c"; }
     else if (energetics == "E") { return "bg-e"; }
-    else { return "bg-g" }    
+    else { return "bg-g" }
+}
+
+function energetics_extra_cost(energetics) {
+    return ({
+        A : "216.6€/m2 d'économies par rapport à la concurrence",
+        B : "161.5€/m2 d'économies par rapport à la concurrence",
+        C : "81.7€/m2 d'économies par rapport à la concurrence",
+        D : "30.4€/m2 de surcout par rapport à la concurrence",
+        E : "76€/m2 de surcout par rapport à la concurrence",
+        F : "188.1€/m2 de surcout par rapport à la concurrence",
+        G : "340€/m2 de surcout par rapport à la concurrence"
+    }[energetics] ?? "Inconnu");
 }
 
 function percent(percent) {

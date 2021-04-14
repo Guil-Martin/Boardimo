@@ -33,7 +33,7 @@ class Controller
         @house = House::get_by_link(link)
         p @house.data["name"]
         p link
-        if !@house.nil?
+        unless @house.nil?
 
             price_sqm = House::get_price_square_meter_house(@house)
             price_sqm_city = House::get_price_square_meter_city(@house.data["cityName"])
@@ -42,8 +42,7 @@ class Controller
             year_compare = House::compare_year(@house)
             energetics_average = House::get_average_energetics_city(@house.data["cityName"])
             energetics_compare = House::compare_energetics(@house)
-            # renovation_cost = House::get_renovation_cost_House(@house)
-            # p @house.data
+            renovation_cost, renovation_avg = House::get_renovation_cost_house(@house)
 
             stats = {
                 "price_sqm" => price_sqm,
@@ -52,18 +51,11 @@ class Controller
                 "year_average" => year_average,
                 "year_compare" => year_compare,
                 "energetics_average" => energetics_average,
-                "energetics_compare" => energetics_compare
+                "energetics_compare" => energetics_compare,
+                "renovation_cost" => renovation_cost
             }
 
-            ## Convert prices, add m² to surface
             house_data = HouseSerializer.new(house: @house.data).to_h
-
-            p house_data
-            # binding.pry
-
-            ## Convert price_sqm_compare, year_compare to percent
-            ## add year_better, price_sqm_better booleans to the stats hash
-            ## depending on more than 100 or less than 100
             stats_data = StatsSerializer.new(stats: stats).to_h
 
             links = House::get_links

@@ -28,6 +28,11 @@ class House
         db.execute("SELECT link FROM House").map {|row| row["link"]}
     end
 
+    def self.get_total_houses_city(city_name)
+        req = db.execute("SELECT COUNT(*) total FROM House WHERE cityName='#{city_name}'")
+        req[0]["total"]
+    end
+
     def self.add_houses(data)
         db.execute(
             "INSERT OR IGNORE INTO House VALUES(:link,:img,:name,:description,:city,:surface,:price,:energetics,:year,:fee)",
@@ -64,7 +69,7 @@ class House
 
     def self.get_average_year_city(city_name)
         data = db.execute(" SELECT AVG(year) avg FROM City
-                            JOIN House ON House.CityName = City.name
+                            JOIN House ON House.CityName = '#{city_name}'
                             WHERE year > 1000")
         data[0]["avg"].to_i
     end
@@ -76,9 +81,26 @@ class House
     end
 
     def self.get_renovation_cost_house(link)
-
-        
-
+        current_year = Time.new.year
+        data = {}
+        if link.is_a?(House)
+            data = link.data            
+        else
+            req = db.execute("SELECT year, surface FROM House WHERE link LIKE '%#{link}' LIMIT 1")
+            data = req[0]
+        end
+        result = {}
+        result["oldness"] = current_year - data["year"]
+        cost = 0
+        case result["oldness"]
+        when 0..9 then cost = -245
+        when 10..19 then cost = -105
+        when 20..39 then cost = 95
+        else cost = 355
+        end
+        result["renov"] = (345 + cost) * data["surface"]
+        result["avg_less"] = (345 * data["surface"]) - result["renov"]
+        result
     end
 
     # V Percent comparing methods V
@@ -87,46 +109,48 @@ class House
     # -(90-100) = 10% better than city average
 
     def self.compare_price_square_meter(link)
-        price_square_meter = 0
-        city_name = ""
         if link.is_a?(House)
-            price_square_meter = (link.data["price"] / link.data["surface"]).to_i
-            city_name = link.data["cityName"]
+            data = link.data
         else
-            data = db.execute("SELECT price, surface, cityName FROM House WHERE link LIKE '%#{link}' LIMIT 1")
-            price_square_meter = (data[0]["price"] / data[0]["surface"]).to_i
-            city_name = data[0]["cityName"]
+            req = db.execute("SELECT price, surface, cityName FROM House WHERE link LIKE '%#{link}' LIMIT 1")
+            data = req[0]
         end
-        price_square_meter_city = get_price_square_meter_city(city_name)
+        price_square_meter = (data["price"] / data["surface"]).to_i
+        price_square_meter_city = get_price_square_meter_city(data["cityName"])
         price_square_meter * 100 / price_square_meter_city
     end
 
     def self.compare_year(link)
-        year = 0
-        city_name = ""
         if link.is_a?(House)
-            year = link.data["year"]
+            data = link.data
         else
-            data = db.execute("SELECT year, cityName FROM House WHERE link LIKE '%#{link}' LIMIT 1")
-            year = data[0]["year"]
+            req = db.execute("SELECT year, cityName FROM House WHERE link LIKE '%#{link}' LIMIT 1")
+            data = req[0]
         end
-        year_city = get_average_year_city(city_name)
-        year * 100 / year_city
+
+        total_houses = get_total_houses_city(data["cityName"])
+
+        req = db.execute("SELECT COUNT(*) total FROM House WHERE '#{data["year"]}' > year AND cityName='#{data["cityName"]}'")
+        more_recent = req[0]["total"]
+
+        more_recent * 100 / total_houses
     end
 
     def self.compare_energetics(link)
-        energetics = 0
-        city_name = ""
+        data = {}
         if link.is_a?(House)
-            energetics = link.data["energetics"]
-            city_name = link.data["cityName"]
+            data = link.data
         else
-            data = db.execute("SELECT energetics, cityName FROM House WHERE link LIKE '%#{link}' LIMIT 1")
-            energetics = data[0]["energetics"]
-            city_name = data[0]["cityName"]
+            req = db.execute("SELECT energetics, cityName FROM House WHERE link LIKE '%#{link}' LIMIT 1")
+            data = req[0]
         end
-        energetics_city = get_average_energetics_city(city_name)
-        energetics * 100 / energetics_city
+
+        total_houses = get_total_houses_city(data["cityName"])
+
+        req = db.execute("SELECT COUNT(*) total FROM House WHERE '#{data["energetics"]}' < energetics AND cityName='#{data["cityName"]}'")
+        better = req[0]["total"]
+
+        better * 100 / total_houses
     end
 
     attr_reader :data

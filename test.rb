@@ -4,7 +4,7 @@ require "sqlite3"
 require "./lib/house"
 require "./lib/house_sanitizer"
 
-link = "simply-home.herokuapp.com/house10.php"
+link = "https://simply-home-cda.herokuapp.com/pages/3.php"
 
 price_square = House::get_price_square_meter_house(link)
 p "get_price_square_meter_house - #{price_square}"  
@@ -12,8 +12,8 @@ p "get_price_square_meter_house - #{price_square}"
 avg_year = House::get_average_year
 p "get_average_year - #{avg_year}"
 
-avg_energetics = House::get_average_energetics
-p "get_average_energetics - #{avg_energetics}"
+avg_energetics = House::get_average_energetics_city("Séné")
+p "get_average_energetics_city - #{avg_energetics}"
 
 avg_price_city = House::get_price_square_meter_city("Séné")
 p "get_price_square_meter_city Séné - #{avg_price_city}"
@@ -55,14 +55,14 @@ p "compare_year OBJ House - #{compare_year}"
 compare_year = House::compare_year(link)
 p "compare_year by link - #{compare_year}"
 
-
-
-p House::get_links
+# p House::get_links
 
 num = 73
-
 p num.to_s.length
-
 p num.to_s.gsub(/\d(?=(...)+$)/, '\0 ')
+
+renov = House::get_renovation_cost_house(link)
+p "get_renovation_cost_house by link - #{renov}"
+
 
 # binding.pry
