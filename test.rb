@@ -55,4 +55,8 @@ p "compare_year OBJ House - #{compare_year}"
 compare_year = House::compare_year(link)
 p "compare_year by link - #{compare_year}"
 
+
+
+p House::get_links
+
 # binding.pry

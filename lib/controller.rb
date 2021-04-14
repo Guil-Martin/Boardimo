@@ -10,6 +10,7 @@ require "sqlite3"
 require "./lib/house"
 require "./lib/house_sanitizer"
 require "./lib/house_serializer"
+require "./lib/stats_serializer"
 
 class Controller
 
@@ -25,7 +26,6 @@ class Controller
 
     def api_index 
         @houses = House::all_to_h
-        #binding.pry
         render_json({houses: @houses})
     end
 
@@ -49,16 +49,23 @@ class Controller
                 "year_compare" => year_compare
             }            
 
+            ## Convert prices, add m² to surface
+            # house_data = 
+            # HouseSerializer.new(
+            #     house: @house.data,
+            # ).to_h
+
             ## Convert price_sqm_compare, year_compare to percent
             ## add year_better, price_sqm_better booleans to the stats hash
             ## depending on more than 100 or less than 100
-            # data = 
-            # HouseSerializer.new(
-            #     house: @house,
+            # stats_data =
+            # StatsSerializer.new(
             #     price_sqm_city: price_sqm_city,
             #     price_sqm_compare: price_sqm_compare,
             #     year_compare: year_compare,
-            # ).to_h            
+            # )
+
+            links = House::get_links
 
             # binding.pry
 
@@ -68,6 +75,11 @@ class Controller
         end
 
     end
+
+    def api_links 
+        links = House::get_links
+        render_json({links: links})
+    end    
 
     def not_found
         render({}, 404)

@@ -54,58 +54,39 @@ btnScan.addEventListener("click", function(e) {
 
 });
 
+var linksEnable = document.getElementById("linksEnable"); 
+var linksContainer = document.getElementsByClassName("links")[0]; 
+linksEnable.addEventListener("click", function(e) {
 
-// var content = document.getElementById("test");
-// var btnScan = document.getElementById("scan");
-// btnScan.addEventListener("click", function(e) {
+    console.log(e.currentTarget);
+    e.currentTarget.disabled = true;
 
-//     fetch('http://localhost:7373/api_index')
-//     .then(response => response.json())
-//     .then(data => {
+    fetch('http://localhost:7373/api_links')
+    .then(response => response.json())
+    .then(data => {
 
-//         console.log(data["houses"])
+        linksContainer.innerHTML = ""
 
-//         for (let index = 0; index < data["houses"].length; index++) {
-//             content.innerHTML += "<p>"+ data["houses"][index]["link"] + "</p>"      
-            
-            
+        console.log(data)
 
+        for (let index = 0; index < data["links"].length; index++) {
+            linksContainer.innerHTML +=     
+            `
+            <button value="${data["links"][index]}" class="linkBtn">M</button>
+            `
+        }
 
+        var buttons = linksContainer.querySelectorAll('.linkBtn');
+        for (var i = 0; i < buttons.length; i++) {
+            buttons[i].addEventListener('click', function(ebtn) {
+                scanInput.value = ebtn.currentTarget.value;
+                btnScan.click();
+            });
+        }
 
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
 
-
-
-
-            
-//         }
-
-//         // // List of available products in an option select
-//         // for (let [key, value] of Object.entries(data.product_list)) {
-//         //     console.log(`${key}: ${value}`);
-//         //     select.innerHTML += "<option value="+ key +">"+key+"</option>"
-//         // }
-//         // // CREATE FRUIT CARDS
-
-//         // // Displays list of products in current cart
-//         // list.innerHTML = null;
-//         // for (let [key, value] of Object.entries(data.cart_list)) {
-//         //     list.innerHTML += "<p value="+ value +">"+ value + "</p>"
-//         // }
-//         // total.innerHTML = data.cart_total + " €"
-
-//         // let btns = document.querySelectorAll('.fruitCard');
-//         // console.log(btns)
-//         // // adding the event listener by looping
-//         // btns.forEach(el => {
-//         //     console.log(el)
-//         //     el.addEventListener('click', (e) => {
-//         //         console.log(e.currentTarget.value);
-//         //     });
-//         // });
-
-//     })
-//     .catch((error) => {
-//         console.error('Error:', error);
-//     });
-
-// });
+});

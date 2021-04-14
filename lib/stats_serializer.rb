@@ -1,0 +1,3 @@
+class StatsSerializer
+    
+end

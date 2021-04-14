@@ -6,12 +6,6 @@ class HouseSerializer
         6 => "G"
     }
 
-    def db
-        @db ||= SQLite3::Database.new "./boardimo.db"
-        @db.results_as_hash = true
-        @db
-    end
-
     def to_h
 
     end

@@ -1,6 +1,6 @@
 header {
-  background-color: #FFF;
-  border-bottom: 4px solid #B5443B;
+  background-color: #fff;
+  border-bottom: 4px solid #b5443b;
   padding: 20px 0;
 }
 header img {
@@ -9,8 +9,12 @@ header img {
 }
 
 #search {
-  background: rgb(226,235,245);
-  background: linear-gradient(0deg, rgba(226,235,245,1) 0%, rgba(255,255,255,1) 100%);
+  background: rgb(226, 235, 245);
+  background: linear-gradient(
+    0deg,
+    rgba(226, 235, 245, 1) 0%,
+    rgba(255, 255, 255, 1) 100%
+  );
   margin: 0 auto;
   padding: 10px 0 50px;
 }
@@ -22,8 +26,7 @@ header img {
   font-size: 2em;
   margin-top: 100px;
   padding-bottom: 20px;
-
-} 
+}
 
 /* #search input {
   border: 1px solid #6a9ef2;
@@ -31,8 +34,9 @@ header img {
   height: 40px;
 } */
 
-#search button {
-  color: #FFF;
+#search button,
+#linksEnable {
+  color: #fff;
   background-color: #1083b1;
   border: 1px solid #165872;
   padding: 6px;
@@ -46,12 +50,10 @@ header img {
   border-radius: 3px;
 }
 
-
 .center {
   padding: 10px;
   text-align: center;
 }
-
 
 #results {
   margin: 50px auto;
@@ -67,7 +69,6 @@ span.price {
 .bottom-divide {
   padding-top: 15px;
 }
-
 
 #analyse {
   width: 60%;
@@ -87,12 +88,12 @@ span.price {
   font-weight: bold;
 }
 
-#analyse p { 
+#analyse p {
   padding: 8px;
 }
 
 .bg-primary {
-  color: #FFF;
+  color: #fff;
 }
 
 .bg-a {
@@ -124,4 +125,30 @@ span.price {
 }
 .alert-info hr {
   border-top-color: #d3de8b;
+}
+
+#links {
+  width: 60%;
+  text-align: center;
+  margin: 15px auto;
+}
+
+.links {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  border: #000 solid 2px;
+  background-color: #044b68;
+  min-height: 40px;
+}
+.linkBtn {
+  width: 5%;
+  padding: 5px;
+  color: #eef5bf;
+  background-color: #04275e;
+  border: #000 solid 1px;
+}
+.linkBtn:hover {
+  color: #000;
+  background-color: #eef5bf;
 }

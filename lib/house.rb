@@ -16,13 +16,16 @@ class House
     end
 
     def self.all_to_h
-        # Needs to go through a serializer to format the data
         db.execute("SELECT * FROM House")
     end
 
     def self.get_by_link(link)
         data = db.execute("SELECT * FROM House WHERE link LIKE '%#{link}' LIMIT 1")
         self.new(data[0])
+    end
+
+    def self.get_links
+        db.execute("SELECT link FROM House").map {|row| row["link"]}
     end
 
     def self.add_houses(data)
@@ -72,13 +75,12 @@ class House
     end
 
 
-    # VV Percent comparing methods, 
+    # V Percent comparing methods V
     # Return more than 100 if worse or less than 100 if better, excess being the percent 
     # 125 - 100 = 25% more than city average
     # -(90-100) = 10% better than city average
 
     def self.compare_price_square_meter(link)
-
         price_square_meter = 0
         city_name = ""
         if link.is_a?(House)
@@ -94,9 +96,6 @@ class House
     end
 
     def self.compare_year(link)
-        # Return more than 100 if worse or less than 100 if better, more than 100 if not, excess being the percent 
-        # 125 - 100 = 25% more than city average
-        # -(90-100) = 10% better than city average
         year = 0
         if link.is_a?(House)
             year = link.data["year"]
