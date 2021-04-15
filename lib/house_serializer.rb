@@ -21,23 +21,18 @@ class HouseSerializer
         clean_price
         clean_energetics
         clean_fee
-        clean_renovation_cost
     end
 
-    def clean_link
-        
+    def clean_link        
     end
 
-    def clean_name
-       
+    def clean_name       
     end
 
     def clean_description
-
     end
 
-    def clean_city
-        
+    def clean_city        
     end
 
     def clean_surface
@@ -54,12 +49,6 @@ class HouseSerializer
 
     def clean_fee
         @data["fee"] = FEE[@data["fee"]]
-    end
-
-    def clean_renovation_cost
-        
-        # @data["renovation_cost"]["renov"] = to_euros(@data["renovation_cost"]["renov"])
-        # @data["renovation_cost"]["avg_less"] = to_euros(@data["renovation_cost"]["avg_less"])
     end
 
     def to_euros(num)

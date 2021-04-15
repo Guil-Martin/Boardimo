@@ -7,6 +7,7 @@ require "erb"
 require "json"
 require "sqlite3"
 
+require "./lib/scraper"
 require "./lib/house"
 require "./lib/house_sanitizer"
 require "./lib/house_serializer"
@@ -31,9 +32,8 @@ class Controller
 
     def api_scan(link)
         @house = House::get_by_link(link)
-        p @house.data["name"]
-        p link
-        unless @house.nil?
+
+        unless @house.data.nil?
 
             price_sqm = House::get_price_square_meter_house(@house)
             price_sqm_city = House::get_price_square_meter_city(@house.data["cityName"])
@@ -45,10 +45,8 @@ class Controller
             renovation_cost, renovation_avg = House::get_renovation_cost_house(@house)
 
             stats = {
-                "price_sqm" => price_sqm,
-                "price_sqm_raw" => price_sqm,
-                "price_sqm_city" => price_sqm_city,
-                "price_sqm_city_raw" => price_sqm_city,
+                "price_sqm" => price_sqm,                
+                "price_sqm_city" => price_sqm_city,                
                 "price_sqm_compare" => price_sqm_compare,
                 "year_average" => year_average,
                 "year_compare" => year_compare,
@@ -66,7 +64,8 @@ class Controller
 
             render_json({house: house_data, stats: stats_data})
         else
-            # House not found
+            Scraper::scrap_single(link)
+            render_json({})
         end
 
     end

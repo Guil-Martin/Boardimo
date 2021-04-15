@@ -1,8 +1,8 @@
 // Scan
 var scanInput = document.getElementById("scanInput");
 var btnScan = document.getElementById("scan");
-var result = document.getElementById("results")
-var analyse = document.getElementById("analyse")
+var result = document.getElementById("results");
+var analyse = document.getElementById("analyse");
 btnScan.addEventListener("click", function(e) {
 
     fetch('http://localhost:7373/api_scan', {
@@ -30,7 +30,6 @@ btnScan.addEventListener("click", function(e) {
                         ${data["house"]["price"]}
                     </div>
                 </div>
-
                 <div class="divide-y divide-fuchsia-300">
                     <div>
                         <span class="badge bg-primary">${data["house"]["surface"]}</span>   
@@ -46,31 +45,31 @@ btnScan.addEventListener("click", function(e) {
             `;
 
             // Price comparison //
-            let priceSqmPercent = data["stats"]["price_sqm_compare"];
+            let priceSqmPercent = data["stats"]["price_sqm_compare_raw"];
             let priceBG = price_bg(priceSqmPercent);
             let priceGood = priceSqmPercent > 100;
-            priceSqmPercent = percent(priceSqmPercent);
+            priceSqmPercent = data["stats"]["price_sqm_compare"];
             ////
 
             // Year comparison //
             let year_compare = data["stats"]["year_compare"];
             let yearDiff = data["house"]["year"] - data["stats"]["year_average"]
             let yearBG = year_bg(data["stats"]["renovation_cost"]["oldness"]);
-            let extraCostYear = data["stats"]["renovation_cost"]["extra_cost"] 
-            let renov = data["stats"]["renovation_cost"]["renov"]
-            let avg_less = data["stats"]["renovation_cost"]["avg_less"]      
+            let extraCostYear = data["stats"]["renovation_cost"]["extra_cost"] ;
+            let renov = data["stats"]["renovation_cost"]["renov"];
+            let avg_less = data["stats"]["renovation_cost"]["avg_less"];
             ////
 
             // Energetics //
             let energetics = data["house"]["energetics"];
             let energeticsBG = energetics_BG(energetics);
-            let energeticsCompare = percent(data["stats"]["energetics_compare"]);
-            let extraCostEnergetics = extraCostYear
-            ////           
+            let energeticsCompare = data["stats"]["energetics_compare"];
+            let extraCostEnergetics = extraCostYear;
+            ////
             
-            let realSqmPrice = (data["stats"]["price_sqm_raw"] + extraCostYear + extraCostEnergetics)            
-            realSqmPrice = realSqmPrice / 10 | 0
+            let realSqmPrice = (data["stats"]["price_sqm_raw"] + extraCostYear + extraCostEnergetics);
             let realSqmPriceBG = real_sqm_price_bg(data["stats"]["price_sqm_raw"], realSqmPrice);
+            realSqmPrice = (realSqmPrice / 10);
 
             analyse.innerHTML = `
             <h2>Analyse du bien</h2>
@@ -88,14 +87,14 @@ btnScan.addEventListener("click", function(e) {
                 <h4 class="alert-heading">Classe énergie</h4>
                 <p>Cette maison a une <b>classe énergétique ${energetics}</b> ce qui est moins bien que ${energeticsCompare}% des maisons en vente actuellement</b></p>
                 <hr>
-                <p class="mb-0">Le surcoût énergétique par m2 est estimé à 30.4€</b> 
+                <p class="mb-0">Le surcoût énergétique par m2 est estimé à ${extraCostYear}€</b> 
                 </p>
             </div>
             <div class="alert ${realSqmPriceBG}" role="alert">
                 <h4 class="alert-heading">Estimation</h4>
                 <p>En prenant en compte l'année de construction, la localisation et le prix au m2 nous pensons que cette maison est ${realSqmPriceBG == "bg-e" || realSqmPriceBG == "bg-g" ? "surévaluée" : "honnête"}.</p>
                 <hr>
-                <p class="mb-0">Afin de correspondre au prix du marché nous évaluons que le prix de ce bien devrait se situer entre <b>${realSqmPrice * 0.9}k€</b> et <b>${realSqmPrice * 1.1}k€</b></p>
+                <p class="mb-0">Afin de correspondre au prix du marché nous évaluons que le prix de ce bien devrait se situer entre <b>${(realSqmPrice * 0.9) | 0}k€</b> et <b>${(realSqmPrice * 1.1) | 0}k€</b></p>
             </div>
             `
 
@@ -107,8 +106,8 @@ btnScan.addEventListener("click", function(e) {
 
 });
 
-var linksEnable = document.getElementById("linksEnable"); 
-var linksContainer = document.getElementsByClassName("links")[0]; 
+var linksEnable = document.getElementById("linksEnable");
+var linksContainer = document.getElementsByClassName("links")[0];
 linksEnable.addEventListener("click", function(e) {
 
     e.currentTarget.disabled = true;
@@ -166,7 +165,7 @@ function energetics_BG(energetics) {
     if (energetics == "A" || energetics == "B") { return "bg-a" }
     else if (energetics == "C" || energetics == "D") { return "bg-c"; }
     else if (energetics == "E") { return "bg-e"; }
-    else { return "bg-g" }
+    else { return "bg-g"; }
 }
 
 function real_sqm_price_bg(sqmPrice, realSqmPrice) {
@@ -177,8 +176,4 @@ function real_sqm_price_bg(sqmPrice, realSqmPrice) {
     } else if (((sqmPrice * 1.1) <= realSqmPrice) && realSqmPrice < sqmPrice * 1.25 ) {
         return "bg-e"; 
     } else { return "bg-g"; }
-}
-
-function percent(perc) {
-    return perc > 100 ? perc - 100 : -(perc -100);
 }

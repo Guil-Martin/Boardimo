@@ -4,6 +4,9 @@ require "sqlite3"
 require "pry"
 require "./lib/house"
 require "./lib/house_sanitizer"
+require "./lib/scraper"
+
+# Scraper::all
 
 cities = {
     vannes: "https://simply-home.herokuapp.com",
@@ -131,18 +134,6 @@ house_links.each do |link|
             year: year,
             fee: fee
         ).to_h
-
-    #  binding.pry
-
-    # p data[:link]
-    # p data[:name]
-    # p data[:description]
-    # p data[:city]
-    # p data[:surface]
-    # p data[:price]
-    # p data[:energetics]
-    # p data[:year]
-    # p data[:fee]
 
     House::add_houses(data)
 

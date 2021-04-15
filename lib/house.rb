@@ -20,7 +20,7 @@ class House
     end
 
     def self.get_by_link(link)
-        data = db.execute("SELECT * FROM House WHERE link LIKE '%#{link}' LIMIT 1")
+        data = db.execute("SELECT * FROM House WHERE link LIKE '%#{link}'")
         self.new(data[0])
     end
 

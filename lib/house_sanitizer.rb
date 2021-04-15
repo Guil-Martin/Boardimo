@@ -46,8 +46,7 @@ class HouseSanitizer
 
     def clean_city
         @data[:city] = @data[:city].scan(/vannes|Vannes|séné|Séné|questembert|Questembert|auray|Auray/).first.capitalize
-        # @data[:city] = @data[:city].delete("^(vannes|Vannes|séné|Séné|questembert|Questembert|auray|Auray')").capitalize
-    end
+       end
 
     def clean_surface
         @data[:surface].slice!("m2") if @data[:surface].include?("m2")
@@ -61,6 +60,7 @@ class HouseSanitizer
 
     def clean_energetics
         @data[:energetics] = House::ENERGETICS[@data[:energetics].scan(/[A-G]/).first]
+        # @data[:energetics].split(" ").each { |el| return el if House::ENERGETICS[ el.include?(/[A-G]/) }
     end
 
     def clean_year
@@ -73,55 +73,6 @@ class HouseSanitizer
         else
             @data[:fee] = 1
         end
-    end
-
-    # Eventual errors checks
-
-    def valid_data
-        name_safe
-        city_safe
-        surface_safe
-        price_safe
-        energetics_safe
-        year_safe
-        fee_safe
-    end
-    
-    def link_safe
-
-    end
-
-    def name_safe
-
-    end
-
-    def description_safe
-
-    end
-
-    def city_safe
-
-    end
-
-    def surface_safe
-
-    end
-
-    def price_safe
-
-    end
-
-    def energetics_safe
-        # IS DIGIT and not a letter
-    end
-
-    def year_safe
-        current_year = Time.new.year
-        # ARE DIGITS AND BETWEEN 1000 AND CURRENT YEAR
-    end
-    
-    def fee_safe
-
     end
 
 end
