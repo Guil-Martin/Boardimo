@@ -46,7 +46,9 @@ class Controller
 
             stats = {
                 "price_sqm" => price_sqm,
+                "price_sqm_raw" => price_sqm,
                 "price_sqm_city" => price_sqm_city,
+                "price_sqm_city_raw" => price_sqm_city,
                 "price_sqm_compare" => price_sqm_compare,
                 "year_average" => year_average,
                 "year_compare" => year_compare,

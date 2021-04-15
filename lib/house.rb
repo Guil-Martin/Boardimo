@@ -91,16 +91,19 @@ class House
         end
         result = {}
         result["oldness"] = current_year - data["year"]
-        cost = 0
-        case result["oldness"]
+        cost = oldness_cost(result["oldness"])
+        result["extra_cost"] = cost
+        result["renov"] = (345 + cost) * data["surface"]
+        result["avg_less"] = (345 * data["surface"]) - result["renov"]
+        result
+    end
+    def self.oldness_cost(oldness)
+        case oldness
         when 0..9 then cost = -245
         when 10..19 then cost = -105
         when 20..39 then cost = 95
         else cost = 355
         end
-        result["renov"] = (345 + cost) * data["surface"]
-        result["avg_less"] = (345 * data["surface"]) - result["renov"]
-        result
     end
 
     # V Percent comparing methods V
